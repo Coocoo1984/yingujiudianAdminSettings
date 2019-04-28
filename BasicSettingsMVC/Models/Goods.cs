@@ -16,40 +16,61 @@ namespace BasicSettingsMVC.Models
         public bool Disable { get; set; }
 
         [NotMapped]
+        private string _disableForShow;
+        [NotMapped]
         public string DisableForShow
         {
             get
             {
-                return Disable ? "否" : "是";
+                _disableForShow = Disable ? "否" : "是";
+                return _disableForShow;
             }
             set
             {
-                DisableForShow = value;
+                _disableForShow = value;
                 Disable = value == "否" ? true : false;
             }
         }
+        [NotMapped]
+        private string _goodsClassName;
         [NotMapped]
         public string GoodsClassName
         {
             get
             {
-                return GoodsClass?.Name;
+                return _goodsClassName ?? GoodsClass?.Name;
+            }
+            set
+            {
+                _goodsClassName = value;
             }
         }
+        [NotMapped]
+        private string _goodsUnitName;
         [NotMapped]
         public string GoodsUnitName
         {
             get
             {
-                return GoodsUnit?.Name;
+                return _goodsUnitName ?? GoodsUnit?.Name;
+            }
+            set
+            {
+                _goodsUnitName = value;
             }
         }
+        [NotMapped]
+        private string _bizTypeName;
         [NotMapped]
         public string BizTypeName
         {
             get
             {
-                return GoodsClass.BizType.Name;
+                return _bizTypeName?? GoodsClass?.BizType?.Name;
+            }
+            set
+            {
+                _bizTypeName = value;
             }
         }
 

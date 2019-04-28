@@ -16,24 +16,34 @@ namespace BasicSettingsMVC.Models
         public bool Disable { get; set; }
 
         [NotMapped]
+        private string _disableForShow;
+        [NotMapped]
         public string DisableForShow
         {
             get
             {
-                return Disable ? "否" : "是";
+                if(_disableForShow == null)
+                    _disableForShow = Disable ? "否" : "是";
+                return _disableForShow;
             }
             set
             {
-                DisableForShow = value;
+                _disableForShow = value;
                 Disable = value == "否" ? true : false;
             }
         }
+        [NotMapped]
+        private string _bizTypeName;
         [NotMapped]
         public string BizTypeName
         {
             get
             {
-                return BizType?.Name;
+                return _bizTypeName?? BizType?.Name;
+            }
+            set
+            {
+                _bizTypeName = value;
             }
         }
         public virtual BizType BizType { get; set; }

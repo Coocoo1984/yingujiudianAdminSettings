@@ -76,7 +76,7 @@ namespace BasicSettingsMVC.Models
         /// <typeparam name="TResult">类型</typeparam>    
         /// <param name="dt">DataTable</param>    
         /// <returns></returns>    
-        public static List<T> ToListKeyValue<T>(this DataTable dt, string[] propertyArray) where T : class, new()
+        public static List<T> ToListKeyValue<T>(this DataTable dt, Dictionary<string, Tuple<string, string>> TTypeDictionary) where T : class, new()
         {
             //创建一个属性的列表    
             List<PropertyInfo> prlist = new List<PropertyInfo>();
@@ -88,7 +88,7 @@ namespace BasicSettingsMVC.Models
             Array.ForEach<PropertyInfo>(
                 t.GetProperties(), 
                 p => {
-                    if (dt.Columns.IndexOf(p.Name) != -1)
+                    if (TTypeDictionary.ContainsKey(p.Name))
                         prlist.Add(p);
                 });
 
@@ -102,12 +102,9 @@ namespace BasicSettingsMVC.Models
                 T ob = new T();
                 //找到对应的数据  并赋值    
                 prlist.ForEach(
-                    p => {
-                        if (propertyArray.Contains(p.Name))
-                        {
-                            if(row[p.Name] != DBNull.Value)
-                                p.SetValue(ob, row[p.Name], null);
-                        }
+                    p =>
+                    {
+                        p.SetValue(ob, row[TTypeDictionary[p.Name].Item2], null);
                     });
                 //放入到返回的集合中.    
                 result.Add(ob);

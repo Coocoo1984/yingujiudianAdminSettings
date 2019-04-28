@@ -39,7 +39,6 @@ namespace BasicSettingsMVC.Controllers
             try
             {
                 //读取模板
-                //string strTemplateFileName = @"C:\\Users\\Juan\\source\\repos\\WebApplicationTestNPOI\\WebApplicationTestNPOI\\BasicSettingsTemplate.xlsx";
                 XSSFWorkbook wk = null;
 
                 FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Template", "BasicSettingsTemplate.xlsx"));
@@ -96,31 +95,8 @@ namespace BasicSettingsMVC.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Import(List<IFormFile> files)
-        {
 
-            //文件上传保存
-            string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + Path.GetExtension(files[0].FileName);
-            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Upload", fileName);
-            FileInfo strFileData = new FileInfo(filePath);
-            using (FileStream excelData = new FileStream(strFileData.ToString(), FileMode.Open))
-            {
-                await files[0].CopyToAsync(excelData);
-                excelData.Close();
-            }
-            //读取数据文件构造DataSet
-            DataSet ds;
-            using (FileStream excelData = new FileStream(filePath, FileMode.Open))
-            {
-                ds = ExcelUtil.GetDataSet(excelData);
-                excelData.Close();
-            }
-            //批量写入数据库
-            List<BizType> listBizType = DbModel.ToListKeyValue<BizType>(ds.Tables[ExcelUtil.BizTypeDataTableName], ExcelUtil.BizTypeModelPropertyArray);
 
-            return Ok("200");
-        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

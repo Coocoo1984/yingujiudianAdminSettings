@@ -13,14 +13,17 @@ namespace BasicSettingsMVC.Models
         public bool Disable { get; set; }
 
         [NotMapped]
-        public virtual string  DisableForShow {
+        private string _disableForShow;
+        [NotMapped]
+        public string  DisableForShow {
             get {
-                return Disable?"否":"是" ;
+                _disableForShow = Disable ? "否" : "是";
+                return _disableForShow;
             }
             set
             {
-                DisableForShow =  value;
-                Disable = value == "否" ? true : false;
+                _disableForShow = value;
+                Disable = (_disableForShow == "否") ? true : false;
             }
         }
         public virtual ICollection<GoodsClass> GoodsClasses { get; set; }
