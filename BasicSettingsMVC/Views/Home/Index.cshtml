@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "主界面";
+}
+
+<div class="text-center">
+    <div class="form-group">
+        <div class="col-md-5"></div>
+        <div class="col-md-2 col-xs-4">
+            @*<input type="submit" value=" 下载xlsx" class="btn btn-default" asp-controller="Login" asp-action="Login" />*@
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Export">导出下载(xlsx)</a>
+        </div>
+        <div class="col-md-2 col-xs-4">
+            @*<input type="submit" value=" 下载xlsx" class="btn btn-default" asp-controller="Login" asp-action="Login" />*@
+            <input type="file" name="files" multiple class="nav-link text-dark" asp-area="">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-5"></div>
+        <div class="col-md-2 col-xs-4">
+            <input type="button" value="上传导入(仅接受下载后修改xlsx)" class="btn btn-default" asp-controller="Home" asp-action="Import" />
+        </div>
+    </div>
+</div>
