@@ -25,7 +25,7 @@ namespace BasicSettingsMVC.Controllers
             _hostingEnvironment = hostingEnvironment;
             _context = context;
         }
-
+        [HttpGet]
         [Authorize]
         public IActionResult Index()
         {
@@ -51,10 +51,8 @@ namespace BasicSettingsMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Import(List<IFormFile> files)
+        public async Task<IActionResult> Index(IFormFileCollection files)
         {
-
-
             //文件上传保存
             string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + Path.GetExtension(files[0].FileName);
             var filePath = Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Upload", fileName);
@@ -72,9 +70,13 @@ namespace BasicSettingsMVC.Controllers
                 excelData.Close();
             }
             //批量写入数据库
+            //转换为模型对象集合
             List<BizType> listBizType = DbModel.ToListKeyValue<BizType>(ds.Tables[ExcelUtil.BizTypeDataTableName], ExcelUtil.BizTypeDictionary);
+            List<GoodsClass> listGoodsClass = DbModel.ToListKeyValue<GoodsClass>(ds.Tables[ExcelUtil.GoodsClassDataTableName], ExcelUtil.GoodsClassDictionary);
+            List<GoodsUnit> listGoodsUnit = DbModel.ToListKeyValue<GoodsUnit>(ds.Tables[ExcelUtil.GoodsUnitDataTableName], ExcelUtil.GoodsUnitDictionary);
+            List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
 
-            return Ok(new { count = files.Count, filePath });
+            return View();
         }
     }
 }
