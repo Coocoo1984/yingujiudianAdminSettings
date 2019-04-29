@@ -48,10 +48,11 @@ namespace BasicSettingsMVC.Controllers
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
 
             //更新新增(不作删除操作)
+            #region BizType
             //待更新
-            List<BizType> entityBizTypes = _context.BizType.Where(w => listBizType.Select(s=>s.Name).Contains(w.Name)).ToList<BizType>();
-
-            foreach (BizType bt in entityBizTypes)
+            List<BizType> entityBizTypes4update = _context.BizType.Where(w => listBizType.Select(s=>s.Name).Contains(w.Name)).ToList<BizType>();
+            List<BizType> listBizTypeRemove = new List<BizType>();
+            foreach (BizType bt in entityBizTypes4update)
             {
                 foreach(BizType b in listBizType)
                 {
@@ -59,24 +60,69 @@ namespace BasicSettingsMVC.Controllers
                     {
                         bt.Disable = b.Disable;
                         bt.Desc = b.Desc;
-                        listBizType.Remove(b);
+                        listBizTypeRemove.Add(b);
                     }
                 }
             }
-            _context.UpdateRange(entityBizTypes);
+            _context.BizType.UpdateRange(entityBizTypes4update);
+
             //新增
-            if(entityBizTypes.Count > 0)
+            IEnumerable<BizType> listBizTypeInsert = listBizType.Except(listBizTypeRemove);
+            List<BizType> entityBizTypes4Add = new List<BizType>();
+            if (listBizTypeInsert?.Count() > 0)
             {
-                foreach(BizType newBizType in entityBizTypes)
+                foreach (BizType newBizType in listBizTypeInsert)
                 {
-                    _context.BizType.Add(new BizType {
-                        Name = newBizType.Name,
+                    entityBizTypes4Add.Add(new BizType
+                    {
                         Code = newBizType.Name,
-                        Desc = newBizType.Desc,
-                        Disable = newBizType.Disable
+                        Name = newBizType.Name,
+                        Desc = newBizType.Desc
                     });
                 }
             }
+            _context.BizType.AddRange(entityBizTypes4Add);
+
+            #endregion
+
+            #region GoodsClass
+            //待更新
+            List<GoodsClass> entityGoodsClass4update = _context.GoodsClass.Where(w => listGoodsClass.Select(s => s.Name).Contains(w.Name)).ToList<GoodsClass>();
+            List<GoodsClass> listGoodsClassRemove = new List<GoodsClass>();
+            foreach (GoodsClass gc in entityGoodsClass4update)
+            {
+                foreach (GoodsClass g in listGoodsClass)
+                {
+                    if (g.Name == gc.Name)
+                    {
+                        gc.Disable = g.Disable;
+                        gc.Desc = g.Desc;
+
+                        listGoodsClassRemove.Add(g);
+                    }
+                }
+            }
+            _context.GoodsClass.UpdateRange(entityGoodsClass4update);
+
+            //新增
+            IEnumerable<GoodsClass> listGoodsClassInsert = listGoodsClass.Except(listGoodsClassRemove);
+            List<GoodsClass> entityGoodsClass4Add = new List<GoodsClass>();
+            if (listGoodsClassInsert?.Count() > 0)
+            {
+                foreach (GoodsClass newGoodsClass in listGoodsClassInsert)
+                {
+                    entityGoodsClass4Add.Add(new GoodsClass
+                    {
+                        Code = newGoodsClass.Name,
+                        Name = newGoodsClass.Name,
+                        Desc = newGoodsClass.Desc
+                    });
+                }
+            }
+            _context.BizType.AddRange(entityBizTypes4Add);
+
+            #endregion
+
             _context.SaveChanges();
 
 

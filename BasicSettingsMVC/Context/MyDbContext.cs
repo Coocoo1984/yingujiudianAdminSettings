@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -22,10 +23,12 @@ namespace BasicSettingsMVC.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlite("Data Source=C:\\Users\\Juan\\Desktop\\test.db");
             }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,7 +41,7 @@ namespace BasicSettingsMVC.Models
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Code)
                     .HasColumnName("code")
@@ -65,11 +68,11 @@ namespace BasicSettingsMVC.Models
 
             modelBuilder.Entity<Goods>(entity =>
             {
-                entity.ToTable("goods");
+                entity.ToTable("goods").HasKey(k => k.Id);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Code)
                     .HasColumnName("code")
@@ -104,11 +107,11 @@ namespace BasicSettingsMVC.Models
 
             modelBuilder.Entity<GoodsClass>(entity =>
             {
-                entity.ToTable("goods_class");
+                entity.ToTable("goods_class").HasKey(k => k.Id);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.BizTypeId).HasColumnName("biz_type_id");
 
@@ -149,11 +152,11 @@ namespace BasicSettingsMVC.Models
 
             modelBuilder.Entity<GoodsUnit>(entity =>
             {
-                entity.ToTable("goods_unit");
+                entity.ToTable("goods_unit").HasKey(k => k.Id);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
-                    .ValueGeneratedNever();
+                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Code)
                     .HasColumnName("code")
