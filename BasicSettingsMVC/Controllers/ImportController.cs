@@ -25,6 +25,7 @@ namespace BasicSettingsMVC.Controllers
             _hostingEnvironment = hostingEnvironment;
             _context = context;
         }
+        
         [HttpGet]
         [Authorize]
         public IActionResult Index()
@@ -45,6 +46,38 @@ namespace BasicSettingsMVC.Controllers
             List<GoodsClass> listGoodsClass = DbModel.ToListKeyValue<GoodsClass>(ds.Tables[ExcelUtil.GoodsClassDataTableName], ExcelUtil.GoodsClassDictionary);
             List<GoodsUnit> listGoodsUnit = DbModel.ToListKeyValue<GoodsUnit>(ds.Tables[ExcelUtil.GoodsUnitDataTableName], ExcelUtil.GoodsUnitDictionary);
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
+
+            //更新新增(不作删除操作)
+            //待更新
+            List<BizType> entityBizTypes = _context.BizType.Where(w => listBizType.Select(s=>s.Name).Contains(w.Name)).ToList<BizType>();
+
+            foreach (BizType bt in entityBizTypes)
+            {
+                foreach(BizType b in listBizType)
+                {
+                    if(b.Name == bt.Name)
+                    {
+                        bt.Disable = b.Disable;
+                        bt.Desc = b.Desc;
+                        listBizType.Remove(b);
+                    }
+                }
+            }
+            _context.UpdateRange(entityBizTypes);
+            //新增
+            if(entityBizTypes.Count > 0)
+            {
+                foreach(BizType newBizType in entityBizTypes)
+                {
+                    _context.BizType.Add(new BizType {
+                        Name = newBizType.Name,
+                        Code = newBizType.Name,
+                        Desc = newBizType.Desc,
+                        Disable = newBizType.Disable
+                    });
+                }
+            }
+            _context.SaveChanges();
 
 
             return View();
