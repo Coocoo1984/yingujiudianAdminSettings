@@ -14,6 +14,8 @@ namespace BasicSettingsMVC.Models
         public string Remark { get; set; }
         public long? BizTypeId { get; set; }
         public bool Disable { get; set; }
+        public virtual BizType BizType { get; set; }
+        public virtual ICollection<Goods> Goods { get; set; }
 
         [NotMapped]
         private string _disableForShow;
@@ -46,7 +48,6 @@ namespace BasicSettingsMVC.Models
                 _bizTypeName = value;
             }
         }
-        public virtual BizType BizType { get; set; }
-        public virtual ICollection<Goods> Goods { get; set; }
+
     }
 }

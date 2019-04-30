@@ -11,6 +11,7 @@ namespace BasicSettingsMVC.Models
         public string Name { get; set; }
         public string Desc { get; set; }
         public bool Disable { get; set; }
+        public virtual ICollection<GoodsClass> GoodsClasses { get; set; }
 
         [NotMapped]
         private string _disableForShow;
@@ -26,6 +27,5 @@ namespace BasicSettingsMVC.Models
                 Disable = (_disableForShow == "否") ? true : false;
             }
         }
-        public virtual ICollection<GoodsClass> GoodsClasses { get; set; }
     }
 }

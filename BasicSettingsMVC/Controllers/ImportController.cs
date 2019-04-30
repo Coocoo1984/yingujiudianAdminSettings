@@ -49,6 +49,7 @@ namespace BasicSettingsMVC.Controllers
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
 
             //更新新增(不作删除操作)
+
             #region BizType
             //待更新
             List<BizType> entityBizTypes4update = _context.BizType.Where(w => listBizType.Select(s=>s.Name).Contains(w.Name)).ToList<BizType>();
@@ -69,20 +70,21 @@ namespace BasicSettingsMVC.Controllers
 
             //新增
             IEnumerable<BizType> listBizTypeInsert = listBizType.Except(listBizTypeRemove);
-            List<BizType> entityBizTypes4Add = new List<BizType>();
             if (listBizTypeInsert?.Count() > 0)
             {
                 foreach (BizType newBizType in listBizTypeInsert)
                 {
-                    entityBizTypes4Add.Add(new BizType
+                    if (newBizType.Code == null)
                     {
-                        Code = newBizType.Name,
-                        Name = newBizType.Name,
-                        Desc = newBizType.Desc
-                    });
+                        newBizType.Code = newBizType.Name;
+                    }
+                    if (newBizType.Desc == null)
+                    {
+                        newBizType.Desc = newBizType.Desc;
+                    }
                 }
             }
-            _context.BizType.AddRange(entityBizTypes4Add);
+            _context.BizType.AddRange(listBizTypeInsert);
 
             #endregion
 
@@ -101,7 +103,7 @@ namespace BasicSettingsMVC.Controllers
                         gc.Desc = g.Desc;
                         if(g.BizTypeName != gc.BizType.Name)
                         {
-                            g.BizTypeId = entityBizTypes4update.Where(w => g.Name.Equals(w.Name)).SingleOrDefault()?.Id;
+                            g.BizTypeId = entityBizTypes4update.Where(w => g.BizTypeName.Equals(w.Name)).SingleOrDefault()?.Id;
                         }
 
                         listGoodsClassRemove.Add(g);
@@ -112,20 +114,131 @@ namespace BasicSettingsMVC.Controllers
 
             //新增
             IEnumerable<GoodsClass> listGoodsClassInsert = listGoodsClass.Except(listGoodsClassRemove);
-            List<GoodsClass> entityGoodsClass4Add = new List<GoodsClass>();
             if (listGoodsClassInsert?.Count() > 0)
             {
                 foreach (GoodsClass newGoodsClass in listGoodsClassInsert)
                 {
-                    entityGoodsClass4Add.Add(new GoodsClass
+                    if(newGoodsClass.Specification == null)
                     {
-                        Code = newGoodsClass.Name,
-                        Name = newGoodsClass.Name,
-                        Desc = newGoodsClass.Desc
-                    });
+                        newGoodsClass.Specification = newGoodsClass.Name;
+                    }
+                    if (newGoodsClass.Code == null)
+                    {
+                        newGoodsClass.Code = newGoodsClass.Name;
+                    }
+                    if (newGoodsClass.Desc == null)
+                    {
+                        newGoodsClass.Desc = newGoodsClass.Name;
+                    }
+                    newGoodsClass.BizTypeId = entityBizTypes4update.Where(w => newGoodsClass.BizTypeName.Equals(w.Name)).SingleOrDefault()?.Id;
                 }
             }
-            _context.BizType.AddRange(entityBizTypes4Add);
+            _context.GoodsClass.AddRange(listGoodsClassInsert);
+
+            #endregion
+
+            #region GoodsUnit
+            //待更新
+            List<GoodsUnit> entityGoodsUnit4update = _context.GoodsUnit.Where(w => listGoodsUnit.Select(s => s.Name).Contains(w.Name)).ToList<GoodsUnit>();
+            List<GoodsUnit> listGoodsUnitRemove = new List<GoodsUnit>();
+            foreach (GoodsUnit gc in entityGoodsUnit4update)
+            {
+                foreach (GoodsUnit g in listGoodsUnit)
+                {
+                    if (g.Name == gc.Name)
+                    {
+                        gc.Name = g.Name;
+                        gc.Desc = g.Desc;
+
+
+                        listGoodsUnitRemove.Add(g);
+                    }
+                }
+            }
+            _context.GoodsUnit.UpdateRange(entityGoodsUnit4update);
+
+            //新增
+            IEnumerable<GoodsUnit> listGoodsUnitInsert = listGoodsUnit.Except(listGoodsUnitRemove);
+            if (listGoodsUnitInsert?.Count() > 0)
+            {
+                foreach (GoodsUnit newGoodsUnit in listGoodsUnitInsert)
+                {
+                    if (newGoodsUnit.Code == null)
+                    {
+                        newGoodsUnit.Code = newGoodsUnit.Name;
+                    }
+                    if (newGoodsUnit.Desc == null)
+                    {
+                        newGoodsUnit.Desc = newGoodsUnit.Name;
+                    }
+                }
+            }
+            _context.GoodsUnit.AddRange(listGoodsUnitInsert);
+
+            #endregion
+
+            #region Goods
+            //待更新
+            List<Goods> entityGoods4update = _context.Goods
+
+                .Include(i => i.GoodsUnit)
+                .Include(i => i.GoodsClass)
+                .Where(w => listGoods.Select(s => s.Name).Contains(w.Name))
+                .ToList<Goods>();
+            List<Goods> listGoodsRemove = new List<Goods>();
+            foreach (Goods gc in entityGoods4update)
+            {
+                foreach (Goods g in listGoods)
+                {
+                    if (g.Name == gc.Name)
+                    {
+                        gc.Disable = g.Disable;
+                        gc.Specification = g.Specification;
+                        gc.Desc = g.Desc;
+                        if (g.GoodsClassName != gc.GoodsClass.Name)
+                        {
+                            g.GoodsClassId = entityGoodsClass4update.Where(w => g.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
+                        }
+                        if (g.GoodsUnitName != gc.GoodsUnit.Name)
+                        {
+                            g.GoodsUnitId = entityGoodsUnit4update.Where(w => g.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
+                        }
+                        listGoodsRemove.Add(g);
+                    }
+                }
+            }
+            _context.Goods.UpdateRange(entityGoods4update);
+
+            //新增
+            IEnumerable<Goods> listGoodsInsert = listGoods.Except(listGoodsRemove);
+            if (listGoodsInsert?.Count() > 0)
+            {
+                foreach (Goods newGoods in listGoodsInsert)
+                {
+                    if (newGoods.Specification == null)
+                    {
+                        newGoods.Specification = newGoods.Name;
+                    }
+                    if (newGoods.Code == null)
+                    {
+                        newGoods.Code = newGoods.Name;
+                    }
+                    if (newGoods.Desc == null)
+                    {
+                        newGoods.Desc = newGoods.Name;
+                    }
+                    newGoods.GoodsClassId = entityGoodsClass4update.Where(w => newGoods.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
+                    newGoods.GoodsUnitId = entityGoodsUnit4update.Where(w => newGoods.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
+                }
+            }
+            _context.Goods.AddRange(listGoodsInsert);
+
+            #endregion
+
+            #region Permission
+
+
+
 
             #endregion
 

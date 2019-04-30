@@ -14,6 +14,8 @@ namespace BasicSettingsMVC.Models
         public long? GoodsClassId { get; set; }
         public string Specification { get; set; }
         public bool Disable { get; set; }
+        public virtual GoodsClass GoodsClass { get; set; }
+        public virtual GoodsUnit GoodsUnit { get; set; }
 
         [NotMapped]
         private string _disableForShow;
@@ -73,8 +75,5 @@ namespace BasicSettingsMVC.Models
                 _bizTypeName = value;
             }
         }
-
-        public virtual GoodsClass GoodsClass { get; set; }
-        public virtual GoodsUnit GoodsUnit { get; set; }
     }
 }

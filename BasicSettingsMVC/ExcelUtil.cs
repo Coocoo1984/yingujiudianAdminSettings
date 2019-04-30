@@ -228,7 +228,8 @@ namespace BasicSettingsMVC
                                 if (j >= columnsStartIndex)
                                 {
                                     ICell cell = currentRow.GetCell(j);
-                                    if (cell != null && cell.StringCellValue.Length > 0)
+                                    cell?.SetCellType(CellType.String);
+                                    if (cell != null &&  cell.StringCellValue.Length > 0)
                                     {
                                         dataRow[j - columnsStartIndex] = cell.StringCellValue;
                                     }
