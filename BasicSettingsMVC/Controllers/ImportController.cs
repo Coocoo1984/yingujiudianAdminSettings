@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace BasicSettingsMVC.Controllers
 {
@@ -87,7 +88,7 @@ namespace BasicSettingsMVC.Controllers
 
             #region GoodsClass
             //待更新
-            List<GoodsClass> entityGoodsClass4update = _context.GoodsClass.Where(w => listGoodsClass.Select(s => s.Name).Contains(w.Name)).ToList<GoodsClass>();
+            List<GoodsClass> entityGoodsClass4update = _context.GoodsClass.Include(i=>i.BizType).Where(w => listGoodsClass.Select(s => s.Name).Contains(w.Name)).ToList<GoodsClass>();
             List<GoodsClass> listGoodsClassRemove = new List<GoodsClass>();
             foreach (GoodsClass gc in entityGoodsClass4update)
             {
@@ -96,7 +97,12 @@ namespace BasicSettingsMVC.Controllers
                     if (g.Name == gc.Name)
                     {
                         gc.Disable = g.Disable;
+                        gc.Specification = g.Specification;
                         gc.Desc = g.Desc;
+                        if(g.BizTypeName != gc.BizType.Name)
+                        {
+                            g.BizTypeId = entityBizTypes4update.Where(w => g.Name.Equals(w.Name)).SingleOrDefault()?.Id;
+                        }
 
                         listGoodsClassRemove.Add(g);
                     }

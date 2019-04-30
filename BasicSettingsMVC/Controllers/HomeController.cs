@@ -11,6 +11,7 @@ using System.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace BasicSettingsMVC.Controllers
 {
@@ -38,7 +39,7 @@ namespace BasicSettingsMVC.Controllers
             FileStream fsReuslt = null;
             try
             {
-                //读取模板
+                #region ///读取模板
                 XSSFWorkbook wk = null;
 
                 FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Template", "BasicSettingsTemplate.xlsx"));
@@ -48,31 +49,35 @@ namespace BasicSettingsMVC.Controllers
                     wk = new XSSFWorkbook(excelTemplate);
                     excelTemplate.Close();
                 }
+                #endregion
 
-                //读取数据 从db
+                #region ///读取数据 从db
                 DataSet ds = new DataSet();
 
                 List<BizType> listBizType = _context.BizType.ToList();
-                DataTable dtBizType = DbModel.ToDataTableKeyValue(listBizType, ExcelUtil.BizTypeDictionary);
-                dtBizType.TableName = ExcelUtil.BizTypeDataTableName;
+                DataTable dtBizType = DbModel.ToDataTableKeyValue(listBizType, ExcelUtil.BizTypeDataTableName, ExcelUtil.BizTypeDictionary);
                 ds.Tables.Add(dtBizType);
 
 
-                List<GoodsUnit> listGoodsUnit = _context.GoodsUnit.ToList();
-                DataTable dtGoodsUnit = DbModel.ToDataTableKeyValue(listGoodsUnit, ExcelUtil.GoodsUnitDictionary);
-                dtGoodsUnit.TableName = ExcelUtil.GoodsUnitDataTableName;
+                List<GoodsUnit> listGoodsUnit = _context.GoodsUnit
+                    .Include(i=>i.Goods)
+                    .ToList();
+                DataTable dtGoodsUnit = DbModel.ToDataTableKeyValue(listGoodsUnit, ExcelUtil.GoodsUnitDataTableName, ExcelUtil.GoodsUnitDictionary);
                 ds.Tables.Add(dtGoodsUnit);
 
-                List<GoodsClass> listGoodsClass = _context.GoodsClass.ToList();
-                DataTable dtGoodsClass = DbModel.ToDataTableKeyValue(listGoodsClass, ExcelUtil.GoodsClassDictionary);
-                dtGoodsClass.TableName = ExcelUtil.GoodsClassDataTableName;
+                List<GoodsClass> listGoodsClass = _context.GoodsClass
+                    .Include(i=>i.BizType)
+                    .ToList();
+                DataTable dtGoodsClass = DbModel.ToDataTableKeyValue(listGoodsClass, ExcelUtil.GoodsClassDataTableName, ExcelUtil.GoodsClassDictionary);
                 ds.Tables.Add(dtGoodsClass);
 
-                List<Goods> listGoods = _context.Goods.ToList();
-                DataTable dtGoods = DbModel.ToDataTable(listGoods, ExcelUtil.GoodsModelPropertyArray);
-                dtGoods.TableName = ExcelUtil.GoodsDataTableName;
+                List<Goods> listGoods = _context.Goods
+                    .Include(i=>i.GoodsClass)
+                    .Include(i=>i.GoodsUnit)
+                    .ToList();
+                DataTable dtGoods = DbModel.ToDataTableKeyValue(listGoods, ExcelUtil.GoodsDataTableName, ExcelUtil.GoodsDictionary);
                 ds.Tables.Add(dtGoods);
-
+                #endregion
 
                 //写入新对象
                 int result = ExcelUtil.SetDataSet2Workbook(ds, wk);
@@ -94,10 +99,6 @@ namespace BasicSettingsMVC.Controllers
                 return NotFound();
             }
         }
-
-
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

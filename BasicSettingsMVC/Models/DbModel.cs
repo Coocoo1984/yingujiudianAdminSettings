@@ -195,12 +195,14 @@ namespace BasicSettingsMVC.Models
         /// <param name="list">集合</param>    
         /// <param name="keyValuePairs">key:T字段名;value:Datatable列名</param>    
         /// <returns>数据集(表)</returns>   
-        public static DataTable ToDataTableKeyValue<T>(IList<T> list, Dictionary<string, Tuple<string, string>> keyValuePairs)
+        public static DataTable ToDataTableKeyValue<T>(IList<T> list, string tableName , Dictionary<string, Tuple<string, string>> keyValuePairs)
         {
             DataTable result = new DataTable();
             
             if(list != null && list.Count > 0 && keyValuePairs != null && keyValuePairs.Count > 0)
             {
+                result.TableName = tableName;
+
                 foreach (var kv in keyValuePairs)
                 {
                     //循环构造列
