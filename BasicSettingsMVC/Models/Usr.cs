@@ -22,5 +22,7 @@ namespace BasicSettingsMVC.Models
         public int? RoleID { get; set; }
         public bool Disable { get; set; }
 
+        public ICollection<RsPermission> RsUsrPermissions { get; set; }
+
     }
 }

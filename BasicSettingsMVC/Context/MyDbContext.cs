@@ -20,6 +20,7 @@ namespace BasicSettingsMVC.Models
         public virtual DbSet<Goods> Goods { get; set; }
         public virtual DbSet<GoodsClass> GoodsClass { get; set; }
         public virtual DbSet<GoodsUnit> GoodsUnit { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -146,7 +147,6 @@ namespace BasicSettingsMVC.Models
                     .HasColumnType("text(48)")
                     .HasDefaultValueSql("''");
 
-                //
                 entity.HasMany(e => e.Goods).WithOne(e => e.GoodsClass).HasForeignKey(e => e.GoodsClassId);
             });
 
@@ -180,6 +180,49 @@ namespace BasicSettingsMVC.Models
                     .HasDefaultValueSql("''");
 
                 entity.HasMany(e => e.Goods).WithOne(e => e.GoodsUnit).HasForeignKey(e => e.GoodsUnitId);
+            });
+
+            modelBuilder.Entity<Permission>(entity =>
+            {
+                entity.ToTable("permission").HasKey(k => k.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("text(24)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Desc)
+                    .HasColumnName("desc")
+                    .HasColumnType("text(48)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasColumnType("text(48)")
+                    .HasDefaultValueSql("''");
+
+                entity.HasMany(e => e.RsPermission).WithOne(e => e.Permission).HasForeignKey(e => e.PermissionId);
+            });
+
+            modelBuilder.Entity<RsPermission>(entity =>
+            {
+                entity.ToTable("rs_usr_permission").HasKey(k => k.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.UsrWechatId)
+                    .HasColumnName("usr_wechat_id")
+                    .HasColumnType("text(64)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.PermissionId).HasColumnName("permission_id");
             });
         }
     }

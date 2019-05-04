@@ -47,6 +47,7 @@ namespace BasicSettingsMVC.Controllers
             List<GoodsClass> listGoodsClass = DbModel.ToListKeyValue<GoodsClass>(ds.Tables[ExcelUtil.GoodsClassDataTableName], ExcelUtil.GoodsClassDictionary);
             List<GoodsUnit> listGoodsUnit = DbModel.ToListKeyValue<GoodsUnit>(ds.Tables[ExcelUtil.GoodsUnitDataTableName], ExcelUtil.GoodsUnitDictionary);
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
+            List<RsPermission> listRsPermission = DbModel.ToListKeyValue<RsPermission>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
 
             //更新新增(不作删除操作)
 

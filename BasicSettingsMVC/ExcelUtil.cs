@@ -76,49 +76,39 @@ namespace BasicSettingsMVC
             { BizTypeModelPropertyArray[2], new Tuple<string,string>(BizTypeModelOnlyMappedPropertyArray[2], BizTypeSheetHeader[2]) }
         };
 
-
-        //报价明细查看权限
-        public const string QuoteDetailQueryPermissionModelName = "QuoteDetailQueryPermission";
-        public const string QuoteDetailQueryPermissionDataTableName = "报价明细查看权限";
-        public const int QuoteDetailQueryPermissionRowStarIndex = 6;
-        public const int QuoteDetailQueryPermissionColumnStarIndex = 2;
-        static readonly string[] QuoteDetailQueryPermissionSheetHeader = { "微信ID", "是否允许" };
-
-        //三次审批权限
-        public const string Audit3PermissionModelName = "Audit3Permission";
-        public const string Audit3PermissionDataTableName = "三次审批权限";
-        public const int Audit3PermissionRowStarIndex = 6;
-        public const int Audit3PermissionColumnStarIndex = 2;
-        public static readonly string[] Audit3PermissionSheetHeader = { "微信ID", "是否允许" };
-
-        //采购中心台账导出权限
-        public const string CenterExportPermissionModelName = "CenterExportPermission";
-        public const string CenterExportPermissionDataTableName = "采购中心台账导出权限";
-        public const int CenterExportRowStarIndex = 6;
-        public const int CenterExportColumnStarIndex = 2;
-        public static readonly string[] CenterExportPermissionSheetHeader = { "微信ID", "是否允许" };
-
-        //报价审批权限
-        public const string QuoteAuditPermissionModelName = "QuoteAuditPermission";
-        public const string QuoteAuditPermissionDataTableName = "报价审批权限";
-        public const int QuoteAuditPermissionRowStarIndex = 6;
-        public const int QuoteAuditPermissionColumnStarIndex = 2;
-        public static readonly string[] QuoteAuditPermissionSheetHeader = { "微信ID", "是否允许" };
-
-        //二次审批权限
-        public const string Audit2PermissionModelName = "Audit2Permission";
-        public const string Audit2PermissionDataTableName = "二次审批权限";
-        public const int Audit2PermissionRowStarIndex = 6;
-        public const int Audit2PermissionColumStarIndex = 2;
-        public static readonly string[] Audit2PermissionSheetHeader = { "微信ID", "是否允许" };
-
-        //一次审批权限
-        public const string Audit1PermissionModelName = "Audit1Permission";
-        public const string Audit1PermissionDataTableName = "一次审批权限";
-        public const int Audit1PermissionRowStarIndex = 6;
-        public const int Audit1PermissionColumStarIndex = 2;
-        public static readonly string[] Audit1PermissionSheetHeader = { "微信ID", "是否允许" };
-
+        //权限
+        public const string RsPermissionModelName = "RsPermission";
+        public const string RsPermissionDataTableName = "权限";
+        public const int RsPermissionRowStarIndex = 6;
+        public const int RsPermissionColumnStarIndex = 2;
+        public static readonly string[] RsPermissionSheetHeader = {
+            "报价明细查看权限",
+            "报价初审",
+            "报价复审",
+            "采购初审",
+            "采购复审",
+            "采购三审",
+            "退货审核",
+            "库管",
+            "报表导出"
+        };
+        public static readonly string[] RsPermissionModelOnlyMappedPropertyArray = {
+            "QuoteDetailQueryPermission",
+            "QuoteAuditPermission",
+            "QuoteAudit2Permission",
+            "PlanAuditPermission",
+            "PlanAudit2Permission",
+            "PlanAudit3Permission",
+            "ChargeBackAuditPermission",
+            "ReportExportPermission"
+        };
+        public static readonly string[] RsPermissionModelPropertyArray = { "Name", "Desc", "DisableForShow" };
+        //未隐射属性名, <DB隐射属性名, excel列名>
+        public static Dictionary<string, Tuple<string, string>> RsPermissionDictionary = new Dictionary<string, Tuple<string, string>>(){
+            { RsPermissionModelPropertyArray[0], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[0], RsPermissionSheetHeader[0]) },
+            { RsPermissionModelPropertyArray[1], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[1], RsPermissionSheetHeader[1]) },
+            { RsPermissionModelPropertyArray[2], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[2], RsPermissionSheetHeader[2]) }
+        };
 
 
 
@@ -287,14 +277,8 @@ namespace BasicSettingsMVC
                     case GoodsUnitDataTableName:
                         result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
                         break;
-                    case QuoteDetailQueryPermissionDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, QuoteDetailQueryPermissionRowStarIndex, QuoteDetailQueryPermissionColumnStarIndex, QuoteDetailQueryPermissionSheetHeader, QuoteDetailQueryPermissionDataTableName));
-                        break;
-                    case Audit3PermissionDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, Audit3PermissionRowStarIndex, Audit3PermissionColumnStarIndex, Audit3PermissionSheetHeader, Audit3PermissionDataTableName));
-                        break;
-                    case CenterExportPermissionDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, CenterExportRowStarIndex, CenterExportColumnStarIndex, CenterExportPermissionSheetHeader, CenterExportPermissionDataTableName));
+                    case RsPermissionDataTableName:
+                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
                         break;
                 }
 
@@ -334,14 +318,8 @@ namespace BasicSettingsMVC
                             case GoodsUnitDataTableName:
                                 result += ExcelUtil.SetDataTable2Sheet(sheet, GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, data.Tables[GoodsUnitDataTableName]);
                                 break;
-                            case QuoteDetailQueryPermissionDataTableName:
-                                result += ExcelUtil.SetDataTable2Sheet(sheet, QuoteDetailQueryPermissionRowStarIndex, QuoteDetailQueryPermissionColumnStarIndex, QuoteAuditPermissionSheetHeader, data.Tables[QuoteDetailQueryPermissionDataTableName]);
-                                break;
-                            case CenterExportPermissionDataTableName:
-                                result += ExcelUtil.SetDataTable2Sheet(sheet, CenterExportRowStarIndex, CenterExportColumnStarIndex, CenterExportPermissionSheetHeader, data.Tables[CenterExportPermissionDataTableName]);
-                                break;
-                            case Audit3PermissionDataTableName:
-                                result += ExcelUtil.SetDataTable2Sheet(sheet, Audit3PermissionRowStarIndex, Audit3PermissionColumnStarIndex, Audit3PermissionSheetHeader, data.Tables[Audit3PermissionDataTableName]);
+                            case RsPermissionDataTableName:
+                                result += ExcelUtil.SetDataTable2Sheet(sheet, RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, data.Tables[RsPermissionDataTableName]);
                                 break;
                         }
                     }

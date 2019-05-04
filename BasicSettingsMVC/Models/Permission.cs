@@ -11,5 +11,6 @@ namespace BasicSettingsMVC.Models
         public string Name { get; set; }
         public string Desc { get; set; }
 
+        public ICollection<RsPermission> RsPermission { get; set; }
     }
 }
