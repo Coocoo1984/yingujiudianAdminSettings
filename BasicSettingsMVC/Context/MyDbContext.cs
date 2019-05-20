@@ -20,7 +20,8 @@ namespace BasicSettingsMVC.Models
         public virtual DbSet<Goods> Goods { get; set; }
         public virtual DbSet<GoodsClass> GoodsClass { get; set; }
         public virtual DbSet<GoodsUnit> GoodsUnit { get; set; }
-        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<Permission> Permission { get; set; }
+        public virtual DbSet<RsPermission> RsPermission { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -211,7 +212,7 @@ namespace BasicSettingsMVC.Models
 
             modelBuilder.Entity<RsPermission>(entity =>
             {
-                entity.ToTable("rs_usr_permission").HasKey(k => k.Id);
+                entity.ToTable("rs_permission").HasKey(k => k.Id);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")

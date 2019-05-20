@@ -77,12 +77,13 @@ namespace BasicSettingsMVC
         };
 
         //权限
-        public const string RsPermissionModelName = "RsPermission";
+        public const string RsPermissionModelName = "Usr";
         public const string RsPermissionDataTableName = "权限";
         public const int RsPermissionRowStarIndex = 6;
         public const int RsPermissionColumnStarIndex = 2;
         public static readonly string[] RsPermissionSheetHeader = {
-            "报价明细查看权限",
+            "微信ID",
+            "报价明细查看",
             "报价初审",
             "报价复审",
             "采购初审",
@@ -93,23 +94,41 @@ namespace BasicSettingsMVC
             "报表导出"
         };
         public static readonly string[] RsPermissionModelOnlyMappedPropertyArray = {
-            "QuoteDetailQueryPermission",
-            "QuoteAuditPermission",
-            "QuoteAudit2Permission",
-            "PlanAuditPermission",
-            "PlanAudit2Permission",
-            "PlanAudit3Permission",
-            "ChargeBackAuditPermission",
-            "ReportExportPermission"
+            "WechatID",
+            "QuoteDetailRead",
+            "QuoteAudit",
+            "QuoteAudit2",
+            "PurchaceAudit",
+            "PurchaceAudit2",
+            "PurchaceAudit3",
+            "ChargeBackAudit",
+            "DepotAdmin",
+            "ReportExport"
         };
-        public static readonly string[] RsPermissionModelPropertyArray = { "Name", "Desc", "DisableForShow" };
+        public static readonly string[] RsPermissionModelPropertyArray = {
+            "WechatID",
+            "QuoteDetailRead",
+            "QuoteAudit",
+            "QuoteAudit2",
+            "PurchaceAudit",
+            "PurchaceAudit2",
+            "PurchaceAudit3",
+            "ChargeBackAudit",
+            "DepotAdmin",
+            "ReportExport"
+        };
         //未隐射属性名, <DB隐射属性名, excel列名>
         public static Dictionary<string, Tuple<string, string>> RsPermissionDictionary = new Dictionary<string, Tuple<string, string>>(){
             { RsPermissionModelPropertyArray[0], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[0], RsPermissionSheetHeader[0]) },
             { RsPermissionModelPropertyArray[1], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[1], RsPermissionSheetHeader[1]) },
-            { RsPermissionModelPropertyArray[2], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[2], RsPermissionSheetHeader[2]) }
+            { RsPermissionModelPropertyArray[2], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[2], RsPermissionSheetHeader[2]) },
+            { RsPermissionModelPropertyArray[3], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[3], RsPermissionSheetHeader[3]) },
+            { RsPermissionModelPropertyArray[4], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[4], RsPermissionSheetHeader[4]) },
+            { RsPermissionModelPropertyArray[5], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[5], RsPermissionSheetHeader[5]) },
+            { RsPermissionModelPropertyArray[6], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[6], RsPermissionSheetHeader[6]) },
+            { RsPermissionModelPropertyArray[7], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[7], RsPermissionSheetHeader[7]) },
+            { RsPermissionModelPropertyArray[8], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[8], RsPermissionSheetHeader[8]) }
         };
-
 
 
         /// <summary>

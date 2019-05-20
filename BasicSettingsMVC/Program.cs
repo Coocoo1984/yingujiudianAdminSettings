@@ -19,6 +19,7 @@ namespace BasicSettingsMVC
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls("http://*:60001")
                 .UseStartup<Startup>();
     }
 }

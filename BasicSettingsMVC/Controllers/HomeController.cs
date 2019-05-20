@@ -31,7 +31,12 @@ namespace BasicSettingsMVC.Controllers
         public IActionResult Index()
         {
             if (ModelState.IsValid) { }
-                return View();
+            return View();
+        }
+
+        public class UsrPermissions {
+            public string WechatID;
+
         }
 
         public IActionResult Export()
@@ -77,6 +82,41 @@ namespace BasicSettingsMVC.Controllers
                     .ToList();
                 DataTable dtGoods = DbModel.ToDataTableKeyValue(listGoods, ExcelUtil.GoodsDataTableName, ExcelUtil.GoodsDictionary);
                 ds.Tables.Add(dtGoods);
+
+                List<RsPermission> listRsPermission = _context.RsPermission
+                    .Include(i => i.Permission)
+                    .ToList();
+
+                var wechatids = listRsPermission.Select(s => s.UsrWechatId).Distinct().ToList();
+
+                List<Usr> listUsrs = new List<Usr>();
+                foreach (string wechatid in wechatids)
+                {
+                    Usr usr = new Usr();
+                    usr.WechatID = wechatid;
+
+                    var wechatList = listRsPermission.Where(w => w.UsrWechatId.Equals(wechatid)).ToList();
+                    foreach (var item in wechatList)
+                    {
+                        switch (item.PermissionId)
+                        {
+                            case 1: usr.QuoteDetailRead = "是"; break;
+                            case 2: usr.QuoteAudit = "是"; break;
+                            case 3: usr.QuoteAudit2 = "是"; break;
+                            case 4: usr.PurchaceAudit = "是"; break;
+                            case 5: usr.PurchaceAudit2 = "是"; break;
+                            case 6: usr.PurchaceAudit3 = "是"; break;
+                            case 7: usr.ChargeBackAudit = "是"; break;
+                            case 8: usr.DepotAdmin = "是"; break;
+                            case 9: usr.ReportExport = "是"; break;
+                        }
+                    }
+                    listUsrs.Add(usr);
+                }
+                DataTable dtUsrs = DbModel.ToDataTableKeyValue(listUsrs, ExcelUtil.RsPermissionDataTableName, ExcelUtil.RsPermissionDictionary);
+                ds.Tables.Add(dtUsrs);
+
+
                 #endregion
 
                 //写入新对象
