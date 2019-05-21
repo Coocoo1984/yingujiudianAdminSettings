@@ -27,6 +27,7 @@ namespace BasicSettingsMVC.Controllers
             _context = context;
         }
 
+        [HttpGet]
         [Authorize]
         public IActionResult Index()
         {
@@ -39,6 +40,8 @@ namespace BasicSettingsMVC.Controllers
 
         }
 
+        [HttpGet]
+        [Authorize]
         public IActionResult Export()
         {
             FileStream fsReuslt = null;

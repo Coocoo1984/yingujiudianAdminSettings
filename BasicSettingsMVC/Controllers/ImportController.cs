@@ -274,6 +274,7 @@ namespace BasicSettingsMVC.Controllers
             List<GoodsClass> listGoodsClass = DbModel.ToListKeyValue<GoodsClass>(ds.Tables[ExcelUtil.GoodsClassDataTableName], ExcelUtil.GoodsClassDictionary);
             List<GoodsUnit> listGoodsUnit = DbModel.ToListKeyValue<GoodsUnit>(ds.Tables[ExcelUtil.GoodsUnitDataTableName], ExcelUtil.GoodsUnitDictionary);
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
+            List<RsPermission> listRsPermission = DbModel.ToListKeyValue<RsPermission>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
 
             #region BizType
             //待更新
@@ -462,7 +463,58 @@ namespace BasicSettingsMVC.Controllers
 
             #region Permission
 
+            //待更新
+            ////List<RsPermission> entityRsPermission4update = _context.RsPermission
+            ////        .Include(i => i.Permission)
+            ////        .ToList();
 
+            ////List<RsPermission> listRsPermissionRemove = new List<RsPermission>();
+            ////foreach (RsPermission gc in entityRsPermission4update)
+            ////{
+            ////    foreach (RsPermission g in listRsPermission)
+            ////    {
+            ////        if (gc.Name == g.Name)
+            ////        {
+            ////            ////gc.Disable = g.Disable;
+            ////            ////gc.Specification = g.Specification;
+            ////            ////gc.Desc = g.Desc;
+            ////            ////if (g.GoodsClassName != gc.GoodsClass.Name)
+            ////            ////{
+            ////            ////    g.GoodsClassId = entityGoodsClass4update.Where(w => g.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
+            ////            ////}
+            ////            ////if (g.GoodsUnitName != gc.GoodsUnit.Name)
+            ////            ////{
+            ////            ////    g.GoodsUnitId = entityGoodsUnit4update.Where(w => g.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
+            ////            ////}
+            ////            listRsPermissionRemove.Add(g);
+            ////        }
+            ////    }
+            ////}
+            ////_context.RsPermission.UpdateRange(entityRsPermission4update);
+
+            //////新增
+            ////IEnumerable<RsPermission> listRsPermissionInsert = listGoods.Except(listGoodsRemove);
+            ////if (listGoodsInsert?.Count() > 0)
+            ////{
+            ////    foreach (Goods newGoods in listGoodsInsert)
+            ////    {
+            ////        if (newGoods.Specification == null)
+            ////        {
+            ////            newGoods.Specification = newGoods.Name;
+            ////        }
+            ////        if (newGoods.Code == null)
+            ////        {
+            ////            newGoods.Code = newGoods.Name;
+            ////        }
+            ////        if (newGoods.Desc == null)
+            ////        {
+            ////            newGoods.Desc = newGoods.Name;
+            ////        }
+            ////        newGoods.GoodsClassId = entityGoodsClass4update.Where(w => newGoods.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
+            ////        newGoods.GoodsUnitId = entityGoodsUnit4update.Where(w => newGoods.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
+            ////    }
+            ////}
+            ////_context.Goods.AddRange(listGoodsInsert);
 
 
             #endregion
