@@ -127,7 +127,8 @@ namespace BasicSettingsMVC
             { RsPermissionModelPropertyArray[5], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[5], RsPermissionSheetHeader[5]) },
             { RsPermissionModelPropertyArray[6], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[6], RsPermissionSheetHeader[6]) },
             { RsPermissionModelPropertyArray[7], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[7], RsPermissionSheetHeader[7]) },
-            { RsPermissionModelPropertyArray[8], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[8], RsPermissionSheetHeader[8]) }
+            { RsPermissionModelPropertyArray[8], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[8], RsPermissionSheetHeader[8]) },
+            { RsPermissionModelPropertyArray[9], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[9], RsPermissionSheetHeader[9]) }
         };
 
 
@@ -277,31 +278,37 @@ namespace BasicSettingsMVC
                 throw exception;
             }
 
-            IEnumerator sheetEnumerator = workbook.GetEnumerator();
-            for (int i = 0; sheetEnumerator.MoveNext(); i++)
-            {
-                //Sheet循环读取
-                ISheet sheet = (ISheet)sheetEnumerator.Current;
-                switch (sheet.SheetName)
-                {
-                    case BizTypeDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, BizTypeRowStarIndex, BizTypeColumnStarIndex, BizTypeSheetHeader, BizTypeDataTableName));
-                        break;
-                    case GoodsClassDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsClassRowStarIndex, GoodsClassColumnStarIndex, GoodsClassSheetHeader, GoodsClassDataTableName));
-                        break;
-                    case GoodsDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsRowStarIndex, GoodsColumnStarIndex, GoodsSheetHeader, GoodsDataTableName));
-                        break;
-                    case GoodsUnitDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
-                        break;
-                    case RsPermissionDataTableName:
-                        result.Tables.Add(ExcelUtil.GetDataTable(sheet, RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
-                        break;
-                }
+            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(BizTypeDataTableName), BizTypeRowStarIndex, BizTypeColumnStarIndex, BizTypeSheetHeader, BizTypeDataTableName));
+            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsClassDataTableName), GoodsClassRowStarIndex, GoodsClassColumnStarIndex, GoodsClassSheetHeader, GoodsClassDataTableName));
+            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsUnitDataTableName), GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
+            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsDataTableName), GoodsRowStarIndex, GoodsColumnStarIndex, GoodsSheetHeader, GoodsDataTableName));
+            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsDataTableName), RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
 
-            }
+            ////IEnumerator sheetEnumerator = workbook.GetEnumerator();
+            ////for (int i = 0; sheetEnumerator.MoveNext(); i++)
+            ////{
+            ////    //Sheet循环读取
+            ////    ISheet sheet = (ISheet)sheetEnumerator.Current;
+            ////    switch (sheet.SheetName)
+            ////    {
+            ////        case BizTypeDataTableName:
+            ////            result.Tables.Add(ExcelUtil.GetDataTable(sheet, BizTypeRowStarIndex, BizTypeColumnStarIndex, BizTypeSheetHeader, BizTypeDataTableName));
+            ////            break;
+            ////        case GoodsClassDataTableName:
+            ////            result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsClassRowStarIndex, GoodsClassColumnStarIndex, GoodsClassSheetHeader, GoodsClassDataTableName));
+            ////            break;
+            ////        case GoodsDataTableName:
+            ////            result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsRowStarIndex, GoodsColumnStarIndex, GoodsSheetHeader, GoodsDataTableName));
+            ////            break;
+            ////        case GoodsUnitDataTableName:
+            ////            result.Tables.Add(ExcelUtil.GetDataTable(sheet, GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
+            ////            break;
+            ////        case RsPermissionDataTableName:
+            ////            result.Tables.Add(ExcelUtil.GetDataTable(sheet, RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
+            ////            break;
+            ////    }
+
+            ////}
             return result;
         }
 

@@ -49,17 +49,21 @@ namespace BasicSettingsMVC.Controllers
             {
                 #region ///读取模板
                 XSSFWorkbook wk = null;
-
+#if DEBUG
                 FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Template", "BasicSettingsTemplate.xlsx"));
+#else
+                FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"/Template", "BasicSettingsTemplate.xlsx"));
+#endif
+
                 using (FileStream excelTemplate = new FileStream(strFileTemplate.ToString(), FileMode.Open))
                 {
                     //把xls文件读入workbook变量里后就关闭
                     wk = new XSSFWorkbook(excelTemplate);
                     excelTemplate.Close();
                 }
-                #endregion
+#endregion
 
-                #region ///读取数据 从db
+#region ///读取数据 从db
                 DataSet ds = new DataSet();
 
                 List<BizType> listBizType = _context.BizType.ToList();
@@ -120,14 +124,18 @@ namespace BasicSettingsMVC.Controllers
                 ds.Tables.Add(dtUsrs);
 
 
-                #endregion
+#endregion
 
                 //写入新对象
                 int result = ExcelUtil.SetDataSet2Workbook(ds, wk);
 
 
                 //生成新excel
+#if DEBUG
                 FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\DownLoad", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
+#else
+                FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"/DownLoad", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
+#endif
                 using (FileStream fs = new FileStream(file.ToString(), FileMode.Create))
                 { 
                     wk.Write(fs);
@@ -139,7 +147,7 @@ namespace BasicSettingsMVC.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound();
+                return new NotFoundObjectResult(ex.Message);
             }
         }
 

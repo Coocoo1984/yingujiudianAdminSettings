@@ -14,6 +14,10 @@ namespace BasicSettingsMVC
     {
         public static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder()
+              .AddCommandLine(args)//增加commandline支持
+              .Build();
+
             CreateWebHostBuilder(args).Build().Run();
         }
 

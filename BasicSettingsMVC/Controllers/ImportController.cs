@@ -31,7 +31,7 @@ namespace BasicSettingsMVC.Controllers
         [Authorize]
         public IActionResult Index()
         {
-
+            #region
             ////FileInfo strDataFile = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Template", "BasicSettingsWithData.xlsx"));
 
             //////读取数据文件构造DataSet
@@ -245,18 +245,23 @@ namespace BasicSettingsMVC.Controllers
 
             ////_context.SaveChanges();
 
-
+            #endregion
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Index(IFormFileCollection files)
         {
             //文件上传保存
             string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + Path.GetExtension(files[0].FileName);
+#if DEBUG
             var filePath = Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Upload", fileName);
+#else
+            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath + @"/Upload", fileName);
+#endif
             FileInfo strFileData = new FileInfo(filePath);
-            using (FileStream excelData = new FileStream(strFileData.ToString(), FileMode.Open))
+            using (FileStream excelData = new FileStream(strFileData.ToString(), FileMode.Create))
             {
                 await files[0].CopyToAsync(excelData);
                 excelData.Close();
@@ -274,9 +279,9 @@ namespace BasicSettingsMVC.Controllers
             List<GoodsClass> listGoodsClass = DbModel.ToListKeyValue<GoodsClass>(ds.Tables[ExcelUtil.GoodsClassDataTableName], ExcelUtil.GoodsClassDictionary);
             List<GoodsUnit> listGoodsUnit = DbModel.ToListKeyValue<GoodsUnit>(ds.Tables[ExcelUtil.GoodsUnitDataTableName], ExcelUtil.GoodsUnitDictionary);
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
-            List<RsPermission> listRsPermission = DbModel.ToListKeyValue<RsPermission>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
+            List<Usr> listUsr = DbModel.ToListKeyValue<Usr>(ds.Tables[ExcelUtil.RsPermissionDataTableName], ExcelUtil.RsPermissionDictionary);
 
-            #region BizType
+#region BizType
             //待更新
             List<BizType> entityBizTypes4update = _context.BizType.Where(w => listBizType.Select(s => s.Name).Contains(w.Name)).ToList<BizType>();
             List<BizType> listBizTypeRemove = new List<BizType>();
@@ -312,9 +317,9 @@ namespace BasicSettingsMVC.Controllers
             }
             _context.BizType.AddRange(listBizTypeInsert);
 
-            #endregion
+#endregion
 
-            #region GoodsClass
+#region GoodsClass
             //待更新
             List<GoodsClass> entityGoodsClass4update = _context.GoodsClass.Include(i => i.BizType).Where(w => listGoodsClass.Select(s => s.Name).Contains(w.Name)).ToList<GoodsClass>();
             List<GoodsClass> listGoodsClassRemove = new List<GoodsClass>();
@@ -361,9 +366,9 @@ namespace BasicSettingsMVC.Controllers
             }
             _context.GoodsClass.AddRange(listGoodsClassInsert);
 
-            #endregion
+#endregion
 
-            #region GoodsUnit
+#region GoodsUnit
             //待更新
             List<GoodsUnit> entityGoodsUnit4update = _context.GoodsUnit.Where(w => listGoodsUnit.Select(s => s.Name).Contains(w.Name)).ToList<GoodsUnit>();
             List<GoodsUnit> listGoodsUnitRemove = new List<GoodsUnit>();
@@ -401,9 +406,9 @@ namespace BasicSettingsMVC.Controllers
             }
             _context.GoodsUnit.AddRange(listGoodsUnitInsert);
 
-            #endregion
+#endregion
 
-            #region Goods
+#region Goods
             //待更新
             List<Goods> entityGoods4update = _context.Goods
 
@@ -459,9 +464,9 @@ namespace BasicSettingsMVC.Controllers
             }
             _context.Goods.AddRange(listGoodsInsert);
 
-            #endregion
+#endregion
 
-            #region Permission
+#region Permission
 
             //待更新
             ////List<RsPermission> entityRsPermission4update = _context.RsPermission
@@ -517,7 +522,7 @@ namespace BasicSettingsMVC.Controllers
             ////_context.Goods.AddRange(listGoodsInsert);
 
 
-            #endregion
+#endregion
 
             _context.SaveChanges();
 

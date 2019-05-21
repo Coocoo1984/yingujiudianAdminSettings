@@ -22,8 +22,8 @@
 
   <ItemGroup>
     <Folder Include="Context\" />
-    <Folder Include="Download\" />
     <Folder Include="Upload\" />
+    <Folder Include="Download\" />
   </ItemGroup>
 
 </Project>

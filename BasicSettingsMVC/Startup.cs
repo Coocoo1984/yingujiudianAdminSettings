@@ -73,7 +73,7 @@ namespace BasicSettingsMVC
                     defaults: new { controller = "Home", action = "Index" }
                     );
             });
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
         }
     }
 }
