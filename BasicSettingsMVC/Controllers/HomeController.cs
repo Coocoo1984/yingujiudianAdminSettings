@@ -49,12 +49,7 @@ namespace BasicSettingsMVC.Controllers
             {
                 #region ///读取模板
                 XSSFWorkbook wk = null;
-#if DEBUG
-                FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Template", "BasicSettingsTemplate.xlsx"));
-#else
-                FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"/Template", "BasicSettingsTemplate.xlsx"));
-#endif
-
+                FileInfo strFileTemplate = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "Template", "BasicSettingsTemplate.xlsx"));
                 using (FileStream excelTemplate = new FileStream(strFileTemplate.ToString(), FileMode.Open))
                 {
                     //把xls文件读入workbook变量里后就关闭
@@ -131,11 +126,7 @@ namespace BasicSettingsMVC.Controllers
 
 
                 //生成新excel
-#if DEBUG
-                FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Download", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
-#else
-                FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"/DownLoad", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
-#endif
+                FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "Download", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
                 using (FileStream fs = new FileStream(file.ToString(), FileMode.Create))
                 { 
                     wk.Write(fs);

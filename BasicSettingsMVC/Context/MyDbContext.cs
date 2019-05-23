@@ -223,6 +223,11 @@ namespace BasicSettingsMVC.Models
                     .HasColumnType("text(64)")
                     .HasDefaultValueSql("''");
 
+                entity.Property(e => e.Disable)
+                    .HasColumnName("disable")
+                    .HasColumnType("INT(1)")
+                    .HasDefaultValueSql("0");
+
                 entity.Property(e => e.PermissionId).HasColumnName("permission_id");
             });
         }

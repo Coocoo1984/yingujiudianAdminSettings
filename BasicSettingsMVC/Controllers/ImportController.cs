@@ -32,7 +32,7 @@ namespace BasicSettingsMVC.Controllers
         public IActionResult Index()
         {
             #region
-            ////FileInfo strDataFile = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Template", "BasicSettingsWithData.xlsx"));
+            ////FileInfo strDataFile = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath,"Template", "BasicSettingsWithData.xlsx"));
 
             //////读取数据文件构造DataSet
             ////DataSet ds;
@@ -255,11 +255,7 @@ namespace BasicSettingsMVC.Controllers
         {
             //文件上传保存
             string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + Path.GetExtension(files[0].FileName);
-#if DEBUG
-            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath + @"\\Upload", fileName);
-#else
-            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath + @"/Upload", fileName);
-#endif
+            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath,"Upload", fileName);
             FileInfo strFileData = new FileInfo(filePath);
             using (FileStream excelData = new FileStream(strFileData.ToString(), FileMode.Create))
             {
@@ -314,8 +310,9 @@ namespace BasicSettingsMVC.Controllers
                         newBizType.Desc = newBizType.Desc;
                     }
                 }
+                _context.BizType.AddRange(listBizTypeInsert);
             }
-            _context.BizType.AddRange(listBizTypeInsert);
+            
 
 #endregion
 
@@ -464,69 +461,136 @@ namespace BasicSettingsMVC.Controllers
             }
             _context.Goods.AddRange(listGoodsInsert);
 
-#endregion
+            #endregion
 
-#region Permission
+            #region Permission
 
             //待更新
-            ////List<RsPermission> entityRsPermission4update = _context.RsPermission
-            ////        .Include(i => i.Permission)
-            ////        .ToList();
+            List<RsPermission> listRsPermission = new List<RsPermission>();
+            foreach(Usr usr  in listUsr)
+            {
+                if (!string.IsNullOrWhiteSpace(usr.QuoteDetailRead))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 1,
+                        Disable = usr.QuoteDetailRead == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.QuoteAudit))
+                {
+                    RsPermission obj = new RsPermission {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 2,
+                        Disable = usr.QuoteAudit == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.QuoteAudit2))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 3,
+                        Disable = usr.QuoteAudit2 == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.PurchaceAudit))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 4,
+                        Disable = usr.PurchaceAudit == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.PurchaceAudit2))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 5,
+                        Disable = usr.PurchaceAudit2 == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.PurchaceAudit3))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 6,
+                        Disable = usr.PurchaceAudit3 == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.ChargeBackAudit))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 7,
+                        Disable = usr.ChargeBackAudit == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.DepotAdmin))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 8,
+                        Disable = usr.DepotAdmin == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.ReportExport))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 9,
+                        Disable = usr.ReportExport == "是" ? true : false
+                    };
+                    listRsPermission.Add(obj);
+                }
+            }
 
-            ////List<RsPermission> listRsPermissionRemove = new List<RsPermission>();
-            ////foreach (RsPermission gc in entityRsPermission4update)
-            ////{
-            ////    foreach (RsPermission g in listRsPermission)
-            ////    {
-            ////        if (gc.Name == g.Name)
-            ////        {
-            ////            ////gc.Disable = g.Disable;
-            ////            ////gc.Specification = g.Specification;
-            ////            ////gc.Desc = g.Desc;
-            ////            ////if (g.GoodsClassName != gc.GoodsClass.Name)
-            ////            ////{
-            ////            ////    g.GoodsClassId = entityGoodsClass4update.Where(w => g.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
-            ////            ////}
-            ////            ////if (g.GoodsUnitName != gc.GoodsUnit.Name)
-            ////            ////{
-            ////            ////    g.GoodsUnitId = entityGoodsUnit4update.Where(w => g.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
-            ////            ////}
-            ////            listRsPermissionRemove.Add(g);
-            ////        }
-            ////    }
-            ////}
-            ////_context.RsPermission.UpdateRange(entityRsPermission4update);
-
-            //////新增
-            ////IEnumerable<RsPermission> listRsPermissionInsert = listGoods.Except(listGoodsRemove);
-            ////if (listGoodsInsert?.Count() > 0)
-            ////{
-            ////    foreach (Goods newGoods in listGoodsInsert)
-            ////    {
-            ////        if (newGoods.Specification == null)
-            ////        {
-            ////            newGoods.Specification = newGoods.Name;
-            ////        }
-            ////        if (newGoods.Code == null)
-            ////        {
-            ////            newGoods.Code = newGoods.Name;
-            ////        }
-            ////        if (newGoods.Desc == null)
-            ////        {
-            ////            newGoods.Desc = newGoods.Name;
-            ////        }
-            ////        newGoods.GoodsClassId = entityGoodsClass4update.Where(w => newGoods.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
-            ////        newGoods.GoodsUnitId = entityGoodsUnit4update.Where(w => newGoods.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
-            ////    }
-            ////}
-            ////_context.Goods.AddRange(listGoodsInsert);
 
 
-#endregion
+            //待更新
+            List<RsPermission> entityRsPermission4update = _context.RsPermission.Where(w => listRsPermission.Select(s => s.UsrWechatId).Contains(w.UsrWechatId)).ToList<RsPermission>();
+            List<RsPermission> listRsPermissionRemove = new List<RsPermission>();
+            foreach (RsPermission rp in entityRsPermission4update)
+            {
+                foreach (RsPermission b in listRsPermission)
+                {
+                    if (b.UsrWechatId == rp.UsrWechatId && b.PermissionId == rp.PermissionId)
+                    {
+                        rp.Disable = b.Disable;
+                        listRsPermissionRemove.Add(b);
+                    }
+                }
+            }
+            _context.RsPermission.UpdateRange(entityRsPermission4update);
+
+            //新增
+            IEnumerable<RsPermission> listRsPermissionInsert = listRsPermission.Except(listRsPermissionRemove);
+            if (listRsPermissionInsert?.Count() > 0)
+            {
+                _context.RsPermission.AddRange(listRsPermissionInsert);
+            }
+            
+
+            #endregion
 
             _context.SaveChanges();
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

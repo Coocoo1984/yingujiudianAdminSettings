@@ -282,7 +282,7 @@ namespace BasicSettingsMVC
             result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsClassDataTableName), GoodsClassRowStarIndex, GoodsClassColumnStarIndex, GoodsClassSheetHeader, GoodsClassDataTableName));
             result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsUnitDataTableName), GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
             result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsDataTableName), GoodsRowStarIndex, GoodsColumnStarIndex, GoodsSheetHeader, GoodsDataTableName));
-            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsDataTableName), RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
+            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(RsPermissionDataTableName), RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
 
             ////IEnumerator sheetEnumerator = workbook.GetEnumerator();
             ////for (int i = 0; sheetEnumerator.MoveNext(); i++)
