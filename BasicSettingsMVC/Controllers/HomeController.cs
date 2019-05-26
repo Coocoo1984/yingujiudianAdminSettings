@@ -102,15 +102,15 @@ namespace BasicSettingsMVC.Controllers
                     {
                         switch (item.PermissionId)
                         {
-                            case 1: usr.QuoteDetailRead = "是"; break;
-                            case 2: usr.QuoteAudit = "是"; break;
-                            case 3: usr.QuoteAudit2 = "是"; break;
-                            case 4: usr.PurchaceAudit = "是"; break;
-                            case 5: usr.PurchaceAudit2 = "是"; break;
-                            case 6: usr.PurchaceAudit3 = "是"; break;
-                            case 7: usr.ChargeBackAudit = "是"; break;
-                            case 8: usr.DepotAdmin = "是"; break;
-                            case 9: usr.ReportExport = "是"; break;
+                            case 1: usr.QuoteDetailRead = item.Disable?"是":"否"; break;
+                            case 2: usr.QuoteAudit = item.Disable ? "是" : "否"; break;
+                            case 3: usr.QuoteAudit2 = item.Disable ? "是" : "否"; break;
+                            case 4: usr.PurchaceAudit = item.Disable ? "是" : "否"; break;
+                            case 5: usr.PurchaceAudit2 = item.Disable ? "是" : "否"; break;
+                            case 6: usr.PurchaceAudit3 = item.Disable ? "是" : "否"; break;
+                            case 7: usr.ChargeBackAudit = item.Disable ? "是" : "否"; break;
+                            case 8: usr.DepotAdmin = item.Disable ? "是" : "否"; break;
+                            case 9: usr.ReportExport = item.Disable ? "是" : "否"; break;
                         }
                     }
                     listUsrs.Add(usr);

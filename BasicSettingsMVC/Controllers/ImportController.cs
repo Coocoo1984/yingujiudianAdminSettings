@@ -312,11 +312,11 @@ namespace BasicSettingsMVC.Controllers
                 }
                 _context.BizType.AddRange(listBizTypeInsert);
             }
-            
+            _context.SaveChanges();
 
-#endregion
+            #endregion
 
-#region GoodsClass
+            #region GoodsClass
             //待更新
             List<GoodsClass> entityGoodsClass4update = _context.GoodsClass.Include(i => i.BizType).Where(w => listGoodsClass.Select(s => s.Name).Contains(w.Name)).ToList<GoodsClass>();
             List<GoodsClass> listGoodsClassRemove = new List<GoodsClass>();
@@ -329,7 +329,7 @@ namespace BasicSettingsMVC.Controllers
                         gc.Disable = g.Disable;
                         gc.Specification = g.Specification;
                         gc.Desc = g.Desc;
-                        if (g.BizTypeName != gc.BizType.Name)
+                        if (g.BizTypeName != gc.BizType?.Name)
                         {
                             g.BizTypeId = entityBizTypes4update.Where(w => g.BizTypeName.Equals(w.Name)).SingleOrDefault()?.Id;
                         }
@@ -342,6 +342,7 @@ namespace BasicSettingsMVC.Controllers
 
             //新增
             IEnumerable<GoodsClass> listGoodsClassInsert = listGoodsClass.Except(listGoodsClassRemove);
+            entityBizTypes4update = _context.BizType.ToList<BizType>();
             if (listGoodsClassInsert?.Count() > 0)
             {
                 foreach (GoodsClass newGoodsClass in listGoodsClassInsert)
@@ -360,12 +361,14 @@ namespace BasicSettingsMVC.Controllers
                     }
                     newGoodsClass.BizTypeId = entityBizTypes4update.Where(w => newGoodsClass.BizTypeName.Equals(w.Name)).SingleOrDefault()?.Id;
                 }
+                _context.GoodsClass.AddRange(listGoodsClassInsert);
             }
-            _context.GoodsClass.AddRange(listGoodsClassInsert);
+            
+            //_context.SaveChanges();
 
-#endregion
+            #endregion
 
-#region GoodsUnit
+            #region GoodsUnit
             //待更新
             List<GoodsUnit> entityGoodsUnit4update = _context.GoodsUnit.Where(w => listGoodsUnit.Select(s => s.Name).Contains(w.Name)).ToList<GoodsUnit>();
             List<GoodsUnit> listGoodsUnitRemove = new List<GoodsUnit>();
@@ -377,7 +380,6 @@ namespace BasicSettingsMVC.Controllers
                     {
                         gc.Name = g.Name;
                         gc.Desc = g.Desc;
-
 
                         listGoodsUnitRemove.Add(g);
                     }
@@ -400,12 +402,14 @@ namespace BasicSettingsMVC.Controllers
                         newGoodsUnit.Desc = newGoodsUnit.Name;
                     }
                 }
+                _context.GoodsUnit.AddRange(listGoodsUnitInsert);
             }
-            _context.GoodsUnit.AddRange(listGoodsUnitInsert);
+            
+            _context.SaveChanges();
 
-#endregion
+            #endregion
 
-#region Goods
+            #region Goods
             //待更新
             List<Goods> entityGoods4update = _context.Goods
 
@@ -423,11 +427,11 @@ namespace BasicSettingsMVC.Controllers
                         gc.Disable = g.Disable;
                         gc.Specification = g.Specification;
                         gc.Desc = g.Desc;
-                        if (g.GoodsClassName != gc.GoodsClass.Name)
+                        if (g.GoodsClassName != gc.GoodsClass?.Name)
                         {
                             g.GoodsClassId = entityGoodsClass4update.Where(w => g.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
                         }
-                        if (g.GoodsUnitName != gc.GoodsUnit.Name)
+                        if (g.GoodsUnitName != gc.GoodsUnit?.Name)
                         {
                             g.GoodsUnitId = entityGoodsUnit4update.Where(w => g.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
                         }
@@ -439,6 +443,9 @@ namespace BasicSettingsMVC.Controllers
 
             //新增
             IEnumerable<Goods> listGoodsInsert = listGoods.Except(listGoodsRemove);
+            entityGoodsClass4update = _context.GoodsClass.ToList<GoodsClass>();
+            entityGoodsUnit4update = _context.GoodsUnit.ToList<GoodsUnit>();
+
             if (listGoodsInsert?.Count() > 0)
             {
                 foreach (Goods newGoods in listGoodsInsert)
@@ -458,8 +465,10 @@ namespace BasicSettingsMVC.Controllers
                     newGoods.GoodsClassId = entityGoodsClass4update.Where(w => newGoods.GoodsClassName.Equals(w.Name)).SingleOrDefault()?.Id;
                     newGoods.GoodsUnitId = entityGoodsUnit4update.Where(w => newGoods.GoodsUnitName.Equals(w.Name)).SingleOrDefault()?.Id;
                 }
+                _context.Goods.AddRange(listGoodsInsert);
             }
-            _context.Goods.AddRange(listGoodsInsert);
+            
+            _context.SaveChanges();
 
             #endregion
 
@@ -475,7 +484,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 1,
-                        Disable = usr.QuoteDetailRead == "是" ? true : false
+                        Disable = usr.QuoteDetailRead == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -484,7 +493,7 @@ namespace BasicSettingsMVC.Controllers
                     RsPermission obj = new RsPermission {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 2,
-                        Disable = usr.QuoteAudit == "是" ? true : false
+                        Disable = usr.QuoteAudit == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -494,7 +503,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 3,
-                        Disable = usr.QuoteAudit2 == "是" ? true : false
+                        Disable = usr.QuoteAudit2 == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -504,7 +513,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 4,
-                        Disable = usr.PurchaceAudit == "是" ? true : false
+                        Disable = usr.PurchaceAudit == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -514,7 +523,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 5,
-                        Disable = usr.PurchaceAudit2 == "是" ? true : false
+                        Disable = usr.PurchaceAudit2 == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -524,7 +533,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 6,
-                        Disable = usr.PurchaceAudit3 == "是" ? true : false
+                        Disable = usr.PurchaceAudit3 == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -534,7 +543,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 7,
-                        Disable = usr.ChargeBackAudit == "是" ? true : false
+                        Disable = usr.ChargeBackAudit == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -544,7 +553,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 8,
-                        Disable = usr.DepotAdmin == "是" ? true : false
+                        Disable = usr.DepotAdmin == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
@@ -554,7 +563,7 @@ namespace BasicSettingsMVC.Controllers
                     {
                         UsrWechatId = usr.WechatID,
                         PermissionId = 9,
-                        Disable = usr.ReportExport == "是" ? true : false
+                        Disable = usr.ReportExport == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
