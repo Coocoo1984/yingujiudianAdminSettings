@@ -111,6 +111,9 @@ namespace BasicSettingsMVC.Controllers
                             case 7: usr.ChargeBackAudit = item.Disable ? "是" : "否"; break;
                             case 8: usr.DepotAdmin = item.Disable ? "是" : "否"; break;
                             case 9: usr.ReportExport = item.Disable ? "是" : "否"; break;
+                            case 10: usr.QuoteCommit = item.Disable ? "是" : "否"; break;
+                            case 11: usr.PurchaceCommit = item.Disable ? "是" : "否"; break;
+                            case 12: usr.ChargeBackCommit = item.Disable ? "是" : "否"; break;
                         }
                     }
                     listUsrs.Add(usr);

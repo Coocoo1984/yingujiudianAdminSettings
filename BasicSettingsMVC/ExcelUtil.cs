@@ -83,36 +83,45 @@ namespace BasicSettingsMVC
         public const int RsPermissionColumnStarIndex = 2;
         public static readonly string[] RsPermissionSheetHeader = {
             "微信ID",
+            "报价提交",//new
             "报价明细查看",
             "报价初审",
             "报价复审",
+            "采购提交",//new
             "采购初审",
             "采购复审",
             "采购三审",
+            "退货提交",//new
             "退货审核",
             "库管",
             "报表导出"
         };
         public static readonly string[] RsPermissionModelOnlyMappedPropertyArray = {
             "WechatID",
+            "QuoteCommit",//new
             "QuoteDetailRead",
             "QuoteAudit",
             "QuoteAudit2",
+            "PurchaceCommit",//new
             "PurchaceAudit",
             "PurchaceAudit2",
             "PurchaceAudit3",
+            "ChargeBackCommit",//new
             "ChargeBackAudit",
             "DepotAdmin",
             "ReportExport"
         };
         public static readonly string[] RsPermissionModelPropertyArray = {
             "WechatID",
+            "QuoteCommit",//new
             "QuoteDetailRead",
             "QuoteAudit",
             "QuoteAudit2",
+            "PurchaceCommit",//new
             "PurchaceAudit",
             "PurchaceAudit2",
             "PurchaceAudit3",
+            "ChargeBackCommit",//new
             "ChargeBackAudit",
             "DepotAdmin",
             "ReportExport"
@@ -128,7 +137,10 @@ namespace BasicSettingsMVC
             { RsPermissionModelPropertyArray[6], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[6], RsPermissionSheetHeader[6]) },
             { RsPermissionModelPropertyArray[7], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[7], RsPermissionSheetHeader[7]) },
             { RsPermissionModelPropertyArray[8], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[8], RsPermissionSheetHeader[8]) },
-            { RsPermissionModelPropertyArray[9], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[9], RsPermissionSheetHeader[9]) }
+            { RsPermissionModelPropertyArray[9], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[9], RsPermissionSheetHeader[9]) },
+            { RsPermissionModelPropertyArray[10], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[10], RsPermissionSheetHeader[10]) },
+            { RsPermissionModelPropertyArray[11], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[11], RsPermissionSheetHeader[11]) },
+            { RsPermissionModelPropertyArray[12], new Tuple<string,string>(RsPermissionModelOnlyMappedPropertyArray[12], RsPermissionSheetHeader[12]) }
         };
 
 

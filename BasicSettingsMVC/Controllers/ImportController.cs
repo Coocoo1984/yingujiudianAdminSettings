@@ -277,7 +277,7 @@ namespace BasicSettingsMVC.Controllers
             List<Goods> listGoods = DbModel.ToListKeyValue<Goods>(ds.Tables[ExcelUtil.GoodsDataTableName], ExcelUtil.GoodsDictionary);
             List<Usr> listUsr = DbModel.ToListKeyValue<Usr>(ds.Tables[ExcelUtil.RsPermissionDataTableName], ExcelUtil.RsPermissionDictionary);
 
-#region BizType
+            #region BizType
             //待更新
             List<BizType> entityBizTypes4update = _context.BizType.Where(w => listBizType.Select(s => s.Name).Contains(w.Name)).ToList<BizType>();
             List<BizType> listBizTypeRemove = new List<BizType>();
@@ -564,6 +564,36 @@ namespace BasicSettingsMVC.Controllers
                         UsrWechatId = usr.WechatID,
                         PermissionId = 9,
                         Disable = usr.ReportExport == "是" ? false : true
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.QuoteCommit))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 10,
+                        Disable = usr.QuoteCommit == "是" ? false : true
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.PurchaceCommit))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 11,
+                        Disable = usr.PurchaceCommit == "是" ? false : true
+                    };
+                    listRsPermission.Add(obj);
+                }
+                if (!string.IsNullOrWhiteSpace(usr.ChargeBackCommit))
+                {
+                    RsPermission obj = new RsPermission
+                    {
+                        UsrWechatId = usr.WechatID,
+                        PermissionId = 12,
+                        Disable = usr.ChargeBackCommit == "是" ? false : true
                     };
                     listRsPermission.Add(obj);
                 }
