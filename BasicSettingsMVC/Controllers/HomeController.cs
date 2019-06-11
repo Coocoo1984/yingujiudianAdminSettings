@@ -58,7 +58,7 @@ namespace BasicSettingsMVC.Controllers
                 }
 #endregion
 
-#region ///读取数据 从db
+                #region ///读取数据 从db
                 DataSet ds = new DataSet();
 
                 List<BizType> listBizType = _context.BizType.ToList();
@@ -122,7 +122,7 @@ namespace BasicSettingsMVC.Controllers
                 ds.Tables.Add(dtUsrs);
 
 
-#endregion
+                #endregion
 
                 //写入新对象
                 int result = ExcelUtil.SetDataSet2Workbook(ds, wk);
