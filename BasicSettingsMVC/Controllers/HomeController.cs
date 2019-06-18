@@ -102,18 +102,18 @@ namespace BasicSettingsMVC.Controllers
                     {
                         switch (item.PermissionId)
                         {
-                            case 1: usr.QuoteDetailRead = item.Disable?"是":"否"; break;
-                            case 2: usr.QuoteAudit = item.Disable ? "是" : "否"; break;
-                            case 3: usr.QuoteAudit2 = item.Disable ? "是" : "否"; break;
-                            case 4: usr.PurchaceAudit = item.Disable ? "是" : "否"; break;
-                            case 5: usr.PurchaceAudit2 = item.Disable ? "是" : "否"; break;
-                            case 6: usr.PurchaceAudit3 = item.Disable ? "是" : "否"; break;
-                            case 7: usr.ChargeBackAudit = item.Disable ? "是" : "否"; break;
-                            case 8: usr.DepotAdmin = item.Disable ? "是" : "否"; break;
-                            case 9: usr.ReportExport = item.Disable ? "是" : "否"; break;
-                            case 10: usr.QuoteCommit = item.Disable ? "是" : "否"; break;
-                            case 11: usr.PurchaceCommit = item.Disable ? "是" : "否"; break;
-                            case 12: usr.ChargeBackCommit = item.Disable ? "是" : "否"; break;
+                            case 1: usr.QuoteDetailRead = item.Disable ? "否" : "是"; break;
+                            case 2: usr.QuoteAudit = item.Disable ? "否" : "是"; break;
+                            case 3: usr.QuoteAudit2 = item.Disable ? "否" : "是"; break;
+                            case 4: usr.PurchaceAudit = item.Disable ? "否" : "是"; break;
+                            case 5: usr.PurchaceAudit2 = item.Disable ? "否" : "是"; break;
+                            case 6: usr.PurchaceAudit3 = item.Disable ? "否" : "是"; break;
+                            case 7: usr.ChargeBackAudit = item.Disable ? "否" : "是"; break;
+                            case 8: usr.DepotAdmin = item.Disable ? "否" : "是"; break;
+                            case 9: usr.ReportExport = item.Disable ? "否" : "是"; break;
+                            case 10: usr.QuoteCommit = item.Disable ? "否" : "是"; break;
+                            case 11: usr.PurchaceCommit = item.Disable ? "否" : "是"; break;
+                            case 12: usr.ChargeBackCommit = item.Disable ? "否" : "是"; break;
                         }
                     }
                     listUsrs.Add(usr);
