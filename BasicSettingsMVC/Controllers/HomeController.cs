@@ -91,32 +91,33 @@ namespace BasicSettingsMVC.Controllers
 
                 var wechatids = listRsPermission.Select(s => s.UsrWechatId).Distinct().ToList();
 
-                List<Usr> listUsrs = new List<Usr>();
+                List<Usr> listUsrs = //new List<Usr>();
+                    _context.Usr.Include(i => i.Role).ToList();
                 foreach (string wechatid in wechatids)
                 {
-                    Usr usr = new Usr();
-                    usr.WechatID = wechatid;
-
-                    var wechatList = listRsPermission.Where(w => w.UsrWechatId.Equals(wechatid)).ToList();
-                    foreach (var item in wechatList)
+                    Usr usr = listUsrs.SingleOrDefault(s => s.WechatID.Equals(wechatid));//微信ID匹配用户权限 暂不将权限与角色关联 角色仅存在于发送消息
+                    if (usr?.ID > 0)
                     {
-                        switch (item.PermissionId)
+                        var wechatList = listRsPermission.Where(w => w.UsrWechatId.Equals(wechatid)).ToList();
+                        foreach (var item in wechatList)
                         {
-                            case 1: usr.QuoteDetailRead = item.Disable ? "否" : "是"; break;
-                            case 2: usr.QuoteAudit = item.Disable ? "否" : "是"; break;
-                            case 3: usr.QuoteAudit2 = item.Disable ? "否" : "是"; break;
-                            case 4: usr.PurchaceAudit = item.Disable ? "否" : "是"; break;
-                            case 5: usr.PurchaceAudit2 = item.Disable ? "否" : "是"; break;
-                            case 6: usr.PurchaceAudit3 = item.Disable ? "否" : "是"; break;
-                            case 7: usr.ChargeBackAudit = item.Disable ? "否" : "是"; break;
-                            case 8: usr.DepotAdmin = item.Disable ? "否" : "是"; break;
-                            case 9: usr.ReportExport = item.Disable ? "否" : "是"; break;
-                            case 10: usr.QuoteCommit = item.Disable ? "否" : "是"; break;
-                            case 11: usr.PurchaceCommit = item.Disable ? "否" : "是"; break;
-                            case 12: usr.ChargeBackCommit = item.Disable ? "否" : "是"; break;
+                            switch (item.PermissionId)
+                            {
+                                case 1: usr.QuoteDetailRead = item.Disable ? "否" : "是"; break;
+                                case 2: usr.QuoteAudit = item.Disable ? "否" : "是"; break;
+                                case 3: usr.QuoteAudit2 = item.Disable ? "否" : "是"; break;
+                                case 4: usr.PurchaceAudit = item.Disable ? "否" : "是"; break;
+                                case 5: usr.PurchaceAudit2 = item.Disable ? "否" : "是"; break;
+                                case 6: usr.PurchaceAudit3 = item.Disable ? "否" : "是"; break;
+                                case 7: usr.ChargeBackAudit = item.Disable ? "否" : "是"; break;
+                                case 8: usr.DepotAdmin = item.Disable ? "否" : "是"; break;
+                                case 9: usr.ReportExport = item.Disable ? "否" : "是"; break;
+                                case 10: usr.QuoteCommit = item.Disable ? "否" : "是"; break;
+                                case 11: usr.PurchaceCommit = item.Disable ? "否" : "是"; break;
+                                case 12: usr.ChargeBackCommit = item.Disable ? "否" : "是"; break;
+                            }
                         }
                     }
-                    listUsrs.Add(usr);
                 }
                 DataTable dtUsrs = DbModel.ToDataTableKeyValue(listUsrs, ExcelUtil.RsPermissionDataTableName, ExcelUtil.RsPermissionDictionary);
                 ds.Tables.Add(dtUsrs);
@@ -141,6 +142,7 @@ namespace BasicSettingsMVC.Controllers
             }
             catch (Exception ex)
             {
+                // excel sheet中DataTtable默认选中范围太小引发 NPOI对象越界
                 return new NotFoundObjectResult(ex.Message);
             }
         }

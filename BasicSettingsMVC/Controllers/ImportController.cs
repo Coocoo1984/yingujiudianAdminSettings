@@ -474,10 +474,17 @@ namespace BasicSettingsMVC.Controllers
 
             #region Permission
 
-            //待更新
+            //所有
             List<RsPermission> listRsPermission = new List<RsPermission>();
-            foreach(Usr usr  in listUsr)
+
+            List<Usr> entitysUsrs = _context.Usr.Include(i=>i.Role).ToList<Usr>();
+            List<Role> entitysRoles = _context.Role.ToList<Role>();
+
+            foreach (Usr usr  in listUsr)
             {
+                var usrEntity = entitysUsrs.SingleOrDefault(s => s.WechatID.Equals(usr.WechatID));//匹配用户
+                usrEntity.Role = entitysRoles.SingleOrDefault(s=>s.Name.Equals(usr.RoleName));//角色关联
+
                 if (!string.IsNullOrWhiteSpace(usr.QuoteDetailRead))
                 {
                     RsPermission obj = new RsPermission
@@ -598,7 +605,6 @@ namespace BasicSettingsMVC.Controllers
                     listRsPermission.Add(obj);
                 }
             }
-
 
 
             //待更新

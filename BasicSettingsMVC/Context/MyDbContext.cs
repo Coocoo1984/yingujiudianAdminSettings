@@ -22,6 +22,8 @@ namespace BasicSettingsMVC.Models
         public virtual DbSet<GoodsUnit> GoodsUnit { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<RsPermission> RsPermission { get; set; }
+        public virtual DbSet<Usr> Usr { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,7 +32,6 @@ namespace BasicSettingsMVC.Models
             {
                 optionsBuilder.UseSqlite("Data Source=C:\\Users\\Juan\\Desktop\\test.db");
             }
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -64,7 +65,7 @@ namespace BasicSettingsMVC.Models
                     .HasColumnName("name")
                     .HasColumnType("text(24)")
                     .HasDefaultValueSql("''");
-                //
+
                 entity.HasMany(e => e.GoodsClasses).WithOne(e => e.BizType).HasForeignKey(e => e.BizTypeId);
             });
 
@@ -229,6 +230,79 @@ namespace BasicSettingsMVC.Models
                     .HasDefaultValueSql("0");
 
                 entity.Property(e => e.PermissionId).HasColumnName("permission_id");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("role").HasKey(k => k.Id);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("text(24)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasColumnType("text(48)")
+                    .HasDefaultValueSql("''");
+
+                entity.HasMany(e => e.Usr).WithOne(e => e.Role).HasForeignKey(e => e.RoleID);
+            });
+
+            modelBuilder.Entity<Usr>(entity =>
+            {
+                entity.ToTable("usr").HasKey(k => k.ID);
+
+                entity.Property(e => e.ID)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.WechatID)
+                    .HasColumnName("wechat_id")
+                    .HasColumnType("text(64)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasColumnType("text(64)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasColumnType("text(64)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Desc)
+                    .HasColumnName("desc")
+                    .HasColumnType("text(48)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Tel)
+                    .HasColumnName("tel")
+                    .HasColumnType("text(16)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Tel1)
+                    .HasColumnName("tel1")
+                    .HasColumnType("text(16)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Mobile)
+                    .HasColumnName("mobile")
+                    .HasColumnType("text(11)")
+                    .HasDefaultValueSql("''");
+
+                entity.Property(e => e.Mobile1)
+                    .HasColumnName("mobile1")
+                    .HasColumnType("text(11)")
+                    .HasDefaultValueSql("''");
+                
+                entity.Property(e => e.RoleID).HasColumnName("role_id");
             });
         }
     }
