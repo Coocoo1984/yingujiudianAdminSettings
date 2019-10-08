@@ -480,10 +480,14 @@ namespace BasicSettingsMVC.Controllers
             List<Usr> entitysUsrs = _context.Usr.Include(i=>i.Role).ToList<Usr>();
             List<Role> entitysRoles = _context.Role.ToList<Role>();
 
+
             foreach (Usr usr  in listUsr)
             {
                 var usrEntity = entitysUsrs.SingleOrDefault(s => s.WechatID.Equals(usr.WechatID));//匹配用户
-                usrEntity.Role = entitysRoles.SingleOrDefault(s=>s.Name.Equals(usr.RoleName));//角色关联
+                if (usrEntity?.ID > 0)
+                {
+                    usrEntity.Role = entitysRoles.SingleOrDefault(s => s.Name.Equals(usr.RoleName));//处理已存在用户的角色关联 不存在的用户(未从微信企业认证进入的新用户)不处理
+                }
 
                 if (!string.IsNullOrWhiteSpace(usr.QuoteDetailRead))
                 {
@@ -606,8 +610,10 @@ namespace BasicSettingsMVC.Controllers
                 }
             }
 
+            //更新用户角色关联
+            _context.Usr.UpdateRange(entitysUsrs);
 
-            //待更新
+            //待更新权限
             List<RsPermission> entityRsPermission4update = _context.RsPermission.Where(w => listRsPermission.Select(s => s.UsrWechatId).Contains(w.UsrWechatId)).ToList<RsPermission>();
             List<RsPermission> listRsPermissionRemove = new List<RsPermission>();
             foreach (RsPermission rp in entityRsPermission4update)
@@ -623,13 +629,12 @@ namespace BasicSettingsMVC.Controllers
             }
             _context.RsPermission.UpdateRange(entityRsPermission4update);
 
-            //新增
+            //新增权限
             IEnumerable<RsPermission> listRsPermissionInsert = listRsPermission.Except(listRsPermissionRemove);
             if (listRsPermissionInsert?.Count() > 0)
             {
                 _context.RsPermission.AddRange(listRsPermissionInsert);
-            }
-            
+            }            
 
             #endregion
 

@@ -48,7 +48,7 @@ namespace BasicSettingsMVC.Models
         public string DepotAdmin { get; set; }
         [NotMapped]
         public string ReportExport { get; set; }
-
+        
         public virtual Role Role { get; set; }
 
         [NotMapped]
