@@ -57,14 +57,14 @@ namespace BasicSettingsMVC.Controllers
                     excelTemplate.Close();
                 }
                 #endregion
-
+                Console.WriteLine(wk.ToString());//
                 #region ///读取数据 从db
                 DataSet ds = new DataSet();
-
+                
                 List<BizType> listBizType = _context.BizType.ToList();
                 DataTable dtBizType = DbModel.ToDataTableKeyValue(listBizType, ExcelUtil.BizTypeDataTableName, ExcelUtil.BizTypeDictionary);
                 ds.Tables.Add(dtBizType);
-
+                
 
                 List<GoodsUnit> listGoodsUnit = _context.GoodsUnit
                     .Include(i=>i.Goods)
@@ -127,7 +127,7 @@ namespace BasicSettingsMVC.Controllers
 
                 //写入新对象
                 int result = ExcelUtil.SetDataSet2Workbook(ds, wk);
-
+                Console.WriteLine($"ExcelUtil.SetDataSet2Workbook(ds, wk):{result}");//
 
                 //生成新excel
                 FileInfo file = new FileInfo(Path.Combine(_hostingEnvironment.ContentRootPath, "Download", DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".xlsx"));
