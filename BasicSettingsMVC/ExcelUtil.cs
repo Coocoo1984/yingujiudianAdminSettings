@@ -13,6 +13,11 @@ namespace BasicSettingsMVC
 
     public static class ExcelUtil
     {
+        const int Version = 6;
+        const string SheetName4Version = "角色";
+        const int RowIndex4Version = 1;
+        const int ColumnIndex4Version = 1;
+
         //商品
         public const string GoodsModelName = "Goods";
         public const string GoodsDataTableName = "商品";
@@ -249,6 +254,7 @@ namespace BasicSettingsMVC
                         if (currentRow.Cells.Count >= result.Columns.Count)
                         {
                             DataRow dataRow = result.NewRow();
+                            bool hasNullCell = false;
                             for (int j = 0; j < columnsStartIndex + result.Columns.Count; j++)
                             {
                                 if (j >= columnsStartIndex)
@@ -261,11 +267,12 @@ namespace BasicSettingsMVC
                                     }
                                     else
                                     {
+                                        hasNullCell = true;
                                         dataRow = null;
                                     }
                                 }
                             }
-                            if (dataRow != null)
+                            if (dataRow != null && !hasNullCell)
                             {
                                 result.Rows.Add(dataRow);
                             }
@@ -285,20 +292,26 @@ namespace BasicSettingsMVC
         {
             DataSet result = new DataSet();
             XSSFWorkbook workbook;
+            int ErrorSheetIndex = -2;
             try
             {
                 workbook = new XSSFWorkbook(stream);
+
+                ErrorSheetIndex = -1;
+                result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(BizTypeDataTableName), BizTypeRowStarIndex, BizTypeColumnStarIndex, BizTypeSheetHeader, BizTypeDataTableName));
+                ErrorSheetIndex = 3;
+                result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsClassDataTableName), GoodsClassRowStarIndex, GoodsClassColumnStarIndex, GoodsClassSheetHeader, GoodsClassDataTableName));
+                ErrorSheetIndex = 2;
+                result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsUnitDataTableName), GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
+                ErrorSheetIndex = 1;
+                result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsDataTableName), GoodsRowStarIndex, GoodsColumnStarIndex, GoodsSheetHeader, GoodsDataTableName));
+                ErrorSheetIndex = 0;
+                result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(RsPermissionDataTableName), RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
             }
             catch (Exception exception)
             {
-                throw exception;
+                throw new Exception(ErrorSheetIndex.ToString());
             }
-
-            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(BizTypeDataTableName), BizTypeRowStarIndex, BizTypeColumnStarIndex, BizTypeSheetHeader, BizTypeDataTableName));
-            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsClassDataTableName), GoodsClassRowStarIndex, GoodsClassColumnStarIndex, GoodsClassSheetHeader, GoodsClassDataTableName));
-            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsUnitDataTableName), GoodsUnitRowStarIndex, GoodsUnitColumnStarIndex, GoodsUnitSheetHeader, GoodsUnitDataTableName));
-            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(GoodsDataTableName), GoodsRowStarIndex, GoodsColumnStarIndex, GoodsSheetHeader, GoodsDataTableName));
-            result.Tables.Add(ExcelUtil.GetDataTable(workbook.GetSheet(RsPermissionDataTableName), RsPermissionRowStarIndex, RsPermissionColumnStarIndex, RsPermissionSheetHeader, RsPermissionDataTableName));
 
             ////IEnumerator sheetEnumerator = workbook.GetEnumerator();
             ////for (int i = 0; sheetEnumerator.MoveNext(); i++)
@@ -369,6 +382,45 @@ namespace BasicSettingsMVC
                 }
             }
 
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <returns>
+        /// -1:文件版本低于模板版本
+        /// 0:文件版本与模板版本相同
+        /// 1:文件高于模板版本
+        /// </returns>
+        public static int CheckVersion(Stream stream)
+        {
+            int result = -1;
+            XSSFWorkbook workbook;
+            try
+            {
+                workbook = new XSSFWorkbook(stream);
+                ISheet sheet = workbook.GetSheet(SheetName4Version);
+                var row = sheet.GetRow(RowIndex4Version);
+                var cell = row.GetCell(ColumnIndex4Version);
+                double? dblVersion = cell?.NumericCellValue;
+                if (dblVersion != null)
+                {
+                    int versionValue = Convert.ToInt32(dblVersion);
+                    int compare = versionValue - Version;
+                    if (compare == 0)
+                        result = 0;
+                    else if (compare > 0)
+                        result = 1;
+                    else if (compare < 0)
+                        result = -1;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
             return result;
         }
 
